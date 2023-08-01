@@ -1,0 +1,53 @@
+version: '3'
+services:
+  #PHP Service
+  saas_app:
+    build:
+      context: .
+      dockerfile: app.docker
+    container_name: saas_app
+    volumes:
+      - ../:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - saas-network
+    links:
+      - saas_mysql:db
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  #Nginx Service
+  web_server:
+    image: nginx:1.21.1
+    container_name: saas_web_server
+    ports:
+      - 8282:80
+    volumes:
+      - ../:/var/www
+      - ./nginx/vhost.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - saas-network
+    depends_on:
+      - saas_app
+
+  # MySQL Service
+  saas_mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 33064:3306
+    environment:
+      MYSQL_DATABASE: saas_db
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - saas-network
+    volumes:
+      - saas-mysql:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+
+#Docker Networks
+networks:
+  saas-network:
+    driver: bridge
+volumes:
+  saas-mysql: {}

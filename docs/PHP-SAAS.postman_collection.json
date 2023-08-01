@@ -1,0 +1,1222 @@
+{
+	"info": {
+		"_postman_id": "720a55bf-57b2-423a-9be8-349e9b08b334",
+		"name": "PHP-SAAS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"value": "{{locale}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"phuocnguyen\",\n    \"email\": \"phuocnguyen@yopmail.com\",\n    \"company_name\": \"phuocnguyen\",\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/register",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						},
+						"description": "Api dùng để  user đăng kí tài khoản"
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"value": "{{locale}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/password/email",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"password",
+								"email"
+							]
+						},
+						"description": "Api dùng để chức năng forgot password, Người dùng sẽ nhập địa chỉ email vào ô input rồi submit form, ở trên backend sẽ xử lí và gửi email reset password cho người dùng"
+					},
+					"response": []
+				},
+				{
+					"name": "forgot password - Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"value": "{{locale}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"token\": \"6a651f7ee61a3c254f46a2f78a762592f4bce3bc2cc4cb907b5abc482ad5eeb6\",\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/password/reset",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"password",
+								"reset"
+							]
+						},
+						"description": "Api dùng khi user submit form từ đường link được gửi trong email khi forgot password, tham số token chính là query string trong url, tham số này phải được gửi lên khi submit form, thì trên backend mới xử lí"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const res = pm.response.json();",
+									"",
+									"if (res && res.access_token) {",
+									" pm.environment.set(\"token\", res.access_token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"value": "{{locale}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "Api dùng để login"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"value": "{{locale}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/logout",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						},
+						"description": "Api dùng để logout tài khoản"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "System",
+			"item": [
+				{
+					"name": "Change Admin Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/admin/account/change-password",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"account",
+								"change-password"
+							]
+						},
+						"description": "Api này dùng để thay đổi password của tài khoản admin"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "Change Password For First Login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/customer/first-login",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								"first-login"
+							]
+						},
+						"description": "Nếu user được tạo bằng tài khoản admin, thì khi user này đăng nhập lần đầu thì bắt buộc phải đổi mật khẩu trước\n\nApi này được sử dụng để thay đổi mật khẩu của user lần đầu tiên"
+					},
+					"response": []
+				},
+				{
+					"name": "Setup Information First",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"name\": \"User\",\n    \"phone_number\": \"+123456789\",\n    \"company_name\": \"Enable Startup\",\n    \"add1\": \"104 Nui Thanh\",\n    \"city\": 1,\n    \"state\": \"Da Nang\",\n    \"zipcode\": \"123-4567\",\n    \"billing_contact_email\": \"{{email}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/customer/setup-information",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								"setup-information"
+							]
+						},
+						"description": "Khi user đăng nhập lần đầu thì user phải cập nhật các thông tin các nhân như địa chỉ, tên công ty, ....\n\nApi này dùng để thay đổi thông tin của user lần đầu tiên đăng nhập"
+					},
+					"response": []
+				},
+				{
+					"name": "List Customers (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/customers?start=0&length=10&page=1&search[value]=123",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "0"
+								},
+								{
+									"key": "length",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "search[value]",
+									"value": "123"
+								}
+							]
+						},
+						"description": "Api để hiển thị danh sách customer trên hệ thống. Api này chỉ có admin mới xài được"
+					},
+					"response": []
+				},
+				{
+					"name": "Show",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/customers/:customer_id",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								":customer_id"
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "0fb839b8-903d-4d48-8995-ba09ea9b43a7"
+								}
+							]
+						},
+						"description": "Api hiển thị thông tin chi tiết của 1 customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Store (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@yopmail.com\",\n    \"name\": \"User\",\n    \"phone_number\": \"+123456789\",\n    \"company_name\": \"Enable Startup\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/customers",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers"
+							]
+						},
+						"description": "Api được dùng để admin của thể tạo ra 1 user mới trong hệ thống. Api này chỉ có mỗi admin sử dụng"
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"name\": \"User\",\n    \"phone_number\": \"+123456789\",\n    \"company_name\": \"Enable Startup\",\n    \"add1\": \"104 Nui Thanh\",\n    \"city\": 1,\n    \"state\": \"Da Nang\",\n    \"zipcode\": \"123-4567\",\n    \"billing_contact_email\": \"{{email}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/customers/20",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"20"
+							]
+						},
+						"description": "Api cập nhật lại thông tin user"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Removed (Admin Only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/customers/update-status/:user_id",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								"update-status",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "62"
+								}
+							]
+						},
+						"description": "Api dùng để disable or enable 1 tài khoản user. Api này chỉ có admin được sử dụng"
+					},
+					"response": []
+				},
+				{
+					"name": "Account Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"password\": \"{{password}}\",\n    \"password_confirmation\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/customers/:customer_id/account",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								":customer_id",
+								"account"
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "0fb839b8-903d-4d48-8995-ba09ea9b43a7"
+								}
+							]
+						},
+						"description": "Api dùng để đổi mật khẩu của customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Payment History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/customers/:customer_id/payment-history?start=0&length=10&page=1",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								":customer_id",
+								"payment-history"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "0"
+								},
+								{
+									"key": "length",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "0fb839b8-903d-4d48-8995-ba09ea9b43a7"
+								}
+							]
+						},
+						"description": "Api dùng để hiển thị các lần thanh toán của customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Invoice Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/customers/:customer_id/invoice/:invoice_id/detail",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								":customer_id",
+								"invoice",
+								":invoice_id",
+								"detail"
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "b1ada677-bb5a-4d40-b083-238ed1504bf1"
+								},
+								{
+									"key": "invoice_id",
+									"value": "in_1LrHdpEVQ9VHoqFtN5Y29TAj"
+								}
+							]
+						},
+						"description": "Api dùng để get thông tin chi tiết của 1 payment, được dùng trong màn hình payment history"
+					},
+					"response": []
+				},
+				{
+					"name": "Invoice Download",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/customers/:customer_id/invoice/:invoice_id/download",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"customers",
+								":customer_id",
+								"invoice",
+								":invoice_id",
+								"download"
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "b1ada677-bb5a-4d40-b083-238ed1504bf1"
+								},
+								{
+									"key": "invoice_id",
+									"value": "in_1LrHdpEVQ9VHoqFtN5Y29TAj"
+								}
+							]
+						},
+						"description": "Api dùng để download file PDF của invoice, được dùng trong màn hình payment history"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Get Setup Intent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"plan\": \"premium\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/payments/get-setup-intent",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								"get-setup-intent"
+							]
+						},
+						"description": "Ở màn hình nhập credit card, lúc submit form thì xử lí ở đây sẽ gọi lên stripe để check thông tin card, ở đây muốn check được thông tin card và lấy về token thì cần phải có client_secret\n\nSử dụng Api này để lấy về client_secret"
+					},
+					"response": []
+				},
+				{
+					"name": "Subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"pm_1Lp6xeEVQ9VHoqFt2jFyzQde\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api_url}}/api/payments",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"payments"
+							]
+						},
+						"description": "Api dùng để subscription 1 plan, được dùng khi submit form credit card, stripe validate thông tin card, nếu mọi thứ hợp lệ thì stripe sẽ trả về 1 token, sử dụng token này để submit lên backend"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/payments/:customer_id/cancel",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								":customer_id",
+								"cancel"
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "0fb839b8-903d-4d48-8995-ba09ea9b43a7"
+								}
+							]
+						},
+						"description": "Api dùng để cancel subscription của 1 customer"
+					},
+					"response": []
+				},
+				{
+					"name": "Resume",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-localization",
+								"type": "text",
+								"value": "{{locale}}"
+							}
+						],
+						"url": {
+							"raw": "{{api_url}}/api/payments/:customer_id/resume",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"payments",
+								":customer_id",
+								"resume"
+							],
+							"variable": [
+								{
+									"key": "customer_id",
+									"value": "0fb839b8-903d-4d48-8995-ba09ea9b43a7"
+								}
+							]
+						},
+						"description": "Api dùng để tiếp tục subscription sau khi user đã cancel subscription, trong điều kiện là subscription này vẫn còn trong thời gian dùng đến khi hết chu kì"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get current User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-localization",
+						"value": "{{locale}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_url}}/api/user",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
