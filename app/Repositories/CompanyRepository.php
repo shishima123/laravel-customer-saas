@@ -16,7 +16,7 @@ class CompanyRepository extends RepositoryAbstract
      *
      * @return  string
      */
-    public function getModel()
+    public function getModel(): string
     {
         return Company::class;
     }

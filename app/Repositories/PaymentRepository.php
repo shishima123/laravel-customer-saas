@@ -16,14 +16,14 @@ class PaymentRepository extends RepositoryAbstract
      *
      * @return  string
      */
-    public function getModel()
+    public function getModel(): string
     {
         return Payment::class;
     }
 
     public function getPaymentHistory($params, $customer, $shouldGetDataForDatatable = false)
     {
-        $sql = Payment::select('*')
+        $sql = $this->model
             ->where('customer_id', $customer->id);
 
         if ($shouldGetDataForDatatable) {

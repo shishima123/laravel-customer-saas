@@ -45,7 +45,7 @@ class Payment extends Model
         return $this->charge_date ? carbon_parse($this->charge_date)->isoFormat('MMM DD, YYYY') : '';
     }
 
-    public function getAmountFormatAttribute()
+    public function getAmountFormatAttribute(): string
     {
         return Cashier::formatAmount($this->amount, $this->currency);
     }

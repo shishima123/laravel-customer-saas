@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\User\CustomerController as UserCustomerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SystemController;
 use Illuminate\Support\Facades\Route;
@@ -8,8 +9,8 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::group(['middleware' => ['auth', 'activated']], function () {
-    Route::get('/customer/first-login', [CustomerController::class, 'firstLoginGet'])->name('first-login-get');
-    Route::post('/customer/first-login', [CustomerController::class, 'firstLoginPost'])->name('first-login-post');
+    Route::get('/customer/first-login', [UserCustomerController::class, 'firstLoginGet'])->name('first-login-get');
+    Route::post('/customer/first-login', [UserCustomerController::class, 'firstLoginPost'])->name('first-login-post');
 
     Route::controller(SystemController::class)
         ->name('systems.')
@@ -19,6 +20,14 @@ Route::group(['middleware' => ['auth', 'activated']], function () {
         });
 
     Route::group(['middleware' => ['changed.password']], function () {
+        Route::controller(UserCustomerController::class)
+            ->name('customers.')
+            ->prefix('customers')
+            ->group(function () {
+            Route::get('/setup-information', 'setupInformationGet')->name('setup-information');
+            Route::put('/setup-information', 'setupInformationPut')->name('setup-information-put');
+        });
+
         Route::group(['middleware' => ['changed.info']], function () {
             Route::get('/', function () {
                 return redirect()->route('customers.index');
@@ -28,11 +37,6 @@ Route::group(['middleware' => ['auth', 'activated']], function () {
                 ->name('customers.')
                 ->prefix('customers')
                 ->group(function () {
-                    $changeInfoMiddleware = 'changed.info';
-                    Route::get('/setup-information', 'setupInformationGet')->name('setup-information')
-                        ->withoutMiddleware($changeInfoMiddleware);
-                    Route::put('/setup-information', 'setupInformationPut')->name('setup-information-put')
-                        ->withoutMiddleware($changeInfoMiddleware);
                     Route::post('/update-status/{user}', 'updateStatus')->name('update-status');
                     Route::get('/{customer}/account', 'changePasswordGet')->name('account');
                     Route::post('/{customer}/account', 'changePasswordPost');

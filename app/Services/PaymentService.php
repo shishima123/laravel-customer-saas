@@ -13,9 +13,9 @@ class PaymentService
     ) {
     }
 
-    public function storeSubscription($request)
+    public function storeSubscription($request): bool
     {
-        $customer = auth()->user()->userable;
+        $customer = auth()->user()?->userable;
         if (!$customer) {
             throw new \UnexpectedValueException(__('message.payment.customer_not_found'));
         }
@@ -28,9 +28,9 @@ class PaymentService
         return true;
     }
 
-    public function resumeSubscription($request)
+    public function resumeSubscription($request): bool
     {
-        $customer = auth()->user()->userable;
+        $customer = auth()->user()?->userable;
         if (!$customer) {
             throw new \UnexpectedValueException(__('message.payment.customer_not_found'));
         }
@@ -47,7 +47,7 @@ class PaymentService
         return true;
     }
 
-    public function cancelSubscription($customer)
+    public function cancelSubscription($customer): bool
     {
         if ($customer->isFree()) {
             throw new \UnexpectedValueException(__('message.payment.customer_is_free'));

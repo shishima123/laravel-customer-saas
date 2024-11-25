@@ -25,7 +25,7 @@ class BlockSassCustomerUserListener
      * @param \App\Events\BlockSassCustomerUserEvent $event
      * @return bool
      */
-    public function handle(BlockSassCustomerUserEvent $event)
+    public function handle(BlockSassCustomerUserEvent $event): bool
     {
         if ($event->user->isInActive()) {
             $customer = $event->user->userable;

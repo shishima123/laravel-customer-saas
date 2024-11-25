@@ -78,7 +78,7 @@ class CustomerController extends ApiController
     public function store(CustomerRequest $request)
     {
         try {
-            $customer = $this->customerService->createCustomer($request->all());
+            $customer = $this->customerService->createCustomer($request->validated());
             return $this->successResponse(__('message.notify.success.create'), $customer);
         } catch (\Exception $e) {
             report($e);

@@ -20,7 +20,7 @@ class StripeReceivedListener
      * @param \Laravel\Cashier\Events\WebhookReceived $event
      * @return Response
      */
-    public function handle(WebhookReceived $event)
+    public function handle(WebhookReceived $event): Response
     {
         $payload = $event->payload;
 
@@ -39,7 +39,7 @@ class StripeReceivedListener
      * @param array $payload
      * @return Response
      */
-    public function handleChargeSucceeded(array $payload)
+    public function handleChargeSucceeded(array $payload): Response
     {
         try {
             $customer = $this->getUserByStripeId($payload['data']['object']['customer']);
@@ -62,7 +62,7 @@ class StripeReceivedListener
      * @param array $payload
      * @return Response
      */
-    public function handleChargeFailed(array $payload)
+    public function handleChargeFailed(array $payload): Response
     {
         try {
             $customer = $this->getUserByStripeId($payload['data']['object']['customer']);
@@ -86,7 +86,7 @@ class StripeReceivedListener
      * @param array $payload
      * @return Response
      */
-    public function handleChargeRefunded(array $payload)
+    public function handleChargeRefunded(array $payload): Response
     {
         try {
             $customer = $this->getUserByStripeId($payload['data']['object']['customer']);
@@ -98,7 +98,7 @@ class StripeReceivedListener
         return $this->successMethod();
     }
 
-    protected function savePayment($payload, $customer)
+    protected function savePayment($payload, $customer): void
     {
         if ($customer) {
             $dataPayment = $this->generateDataPayment($payload, $customer);
@@ -113,7 +113,7 @@ class StripeReceivedListener
      * @param $customer
      * @return array
      */
-    protected function generateDataPayment(array $payload, $customer)
+    protected function generateDataPayment(array $payload, $customer): array
     {
         // create data
         $object = $payload['data']['object'];
@@ -138,12 +138,12 @@ class StripeReceivedListener
         ];
     }
 
-    protected function successMethod()
+    protected function successMethod(): Response
     {
         return new Response('Webhook Handled', 200);
     }
 
-    protected function missingMethod()
+    protected function missingMethod(): Response
     {
         return new Response;
     }

@@ -16,7 +16,7 @@ class StripeHandledListener
      * @param WebhookHandled $event
      * @return void
      */
-    public function handle(WebhookHandled $event)
+    public function handle(WebhookHandled $event): void
     {
         $payload = $event->payload;
         switch ($payload['type']) {

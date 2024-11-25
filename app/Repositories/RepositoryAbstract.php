@@ -185,6 +185,23 @@ abstract class RepositoryAbstract implements RepositoryInterface
         return $this->model->with($tableName);
     }
 
+    /** Update or Create an entity in repository
+     *
+     * @param  array  $attributes
+     * @param  array  $values
+     *
+     * @return mixed
+     */
+    public function updateOrCreate(array $attributes, array $values = []): mixed
+    {
+        return $this->model->updateOrCreate($attributes, $values);
+    }
+
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
     /**
      * return datatable
      *
@@ -203,7 +220,7 @@ abstract class RepositoryAbstract implements RepositoryInterface
         $pk = false,
         $orderCallback = null,
         $getPagination = null
-    ) {
+    ): array {
         $start = (int)$params['start'];
         $length = (int)$params['length'];
         $page = (int)$params['page'];
@@ -248,22 +265,5 @@ abstract class RepositoryAbstract implements RepositoryInterface
             }
             return $response;
         }
-    }
-
-    /** Update or Create an entity in repository
-     *
-     * @param  array  $attributes
-     * @param  array  $values
-     *
-     * @return mixed
-     */
-    public function updateOrCreate(array $attributes, array $values = [])
-    {
-        return $this->model->updateOrCreate($attributes, $values);
-    }
-
-    public function findOrFail($id)
-    {
-        return $this->model->findOrFail($id);
     }
 }

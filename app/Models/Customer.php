@@ -82,11 +82,6 @@ class Customer extends Model
         return $this->hasMany(Payment::class, 'customer_id', 'id');
     }
 
-    public function dbConnection(): HasOne
-    {
-        return $this->hasOne(DbConnection::class, 'customer_id', 'id');
-    }
-
     public function isPremium(): bool
     {
         return $this->subscribed('premium');

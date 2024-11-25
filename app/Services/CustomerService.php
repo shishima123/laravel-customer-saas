@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\Role;
 use App\Enums\UserChangeInfo;
+use App\Enums\UserChangePassword;
 use App\Models\Address;
 use App\Models\Customer;
 use App\Notifications\CreateCustomerUserNotification;
@@ -32,7 +33,7 @@ class CustomerService
     ) {
     }
 
-    public function createCustomer(array $data, bool $isCreatedByClient = false)
+    public function createCustomer(array $data, bool $isCreatedByClient = false): Customer
     {
         return DB::transaction(function () use ($data, $isCreatedByClient) {
             $companyInput = [
@@ -49,35 +50,38 @@ class CustomerService
             ];
             $customer = $this->customerRepo->create($customerInput);
 
-            $password = Str::random(8);
+            // If the user is created by the admin, the password will be attached
+            $passwordAttachment = null;
+            $password = $data['password'] ?? '';
+            if (!$isCreatedByClient) {
+                $password = Str::random(8);
+                $passwordAttachment = $password;
+            }
+
             $userInput = [
                 'email' => $data['email'],
                 'password' => Hash::make($password),
                 'role' => Role::USER,
                 'userable_id' => $customer->id,
                 'userable_type' => 'App\Models\Customer',
+                'is_changed_password' => $isCreatedByClient ? UserChangePassword::CHANGED : UserChangePassword::NO_CHANGE,
             ];
-            $user = $this->userRepo->create($userInput);
 
-            // If the user is created by the admin, the password will be attached
-            $passwordAttachment = null;
-            if ($isCreatedByClient) {
-                $passwordAttachment = $password;
-            }
+            $user = $this->userRepo->create($userInput);
 
             $user->notify(new CreateCustomerUserNotification($passwordAttachment));
             return $customer;
         });
     }
 
-    public function updateCustomer($customer, $request)
+    public function updateCustomer($customer, $request): bool
     {
-        DB::transaction(function () use ($customer, $request) {
+        return DB::transaction(function () use ($customer, $request) {
             $customer->load(['company.address', 'user']);
 
             $address = $customer->company->address ?? app(Address::class);
             $addressInput = $request->only('add1', 'state', 'zipcode', 'city_id');
-            if (isset($addressInput['add1']) && !empty($addressInput['add1'])) {
+            if (!empty($addressInput['add1'])) {
                 $address = $this->addressRepo->updateOrCreate(['id' => $address->id], $addressInput);
             }
 
@@ -105,7 +109,7 @@ class CustomerService
         });
     }
 
-    public function updateStatus($request, $user)
+    public function updateStatus($request, $user): bool
     {
         DB::transaction(function () use ($request, $user) {
             $user->status = $request->status;

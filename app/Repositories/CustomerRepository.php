@@ -17,12 +17,12 @@ class CustomerRepository extends RepositoryAbstract
      *
      * @return  string
      */
-    public function getModel()
+    public function getModel(): string
     {
         return Customer::class;
     }
 
-    public function list($params)
+    public function list($params): array
     {
         $sql = $this->model->select('customers.*')
             ->with(['user', 'company', 'subscriptionRelationLast'])

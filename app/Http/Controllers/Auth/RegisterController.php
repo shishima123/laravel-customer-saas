@@ -2,13 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Enums\Role;
-use App\Events\CreateCompanyEvent;
-use App\Events\CreateSassCustomerUserEvent;
-use App\Events\CreateUserEvent;
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
-use App\Notifications\CreateCustomerUserNotification;
 use App\Providers\RouteServiceProvider;
 use App\Services\CustomerService;
 use App\Traits\ApiResponse;
@@ -23,7 +17,6 @@ use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    use ApiResponse;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -35,7 +28,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers, RenderIdNumberTrait;
+    use RegistersUsers, RenderIdNumberTrait, ApiResponse;
 
     /**
      * Where to redirect users after registration.

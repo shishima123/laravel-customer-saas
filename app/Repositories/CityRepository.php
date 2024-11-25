@@ -16,7 +16,7 @@ class CityRepository extends RepositoryAbstract
      *
      * @return  string
      */
-    public function getModel()
+    public function getModel(): string
     {
         return City::class;
     }
